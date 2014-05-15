@@ -24,3 +24,8 @@ In order to get the demo working, simply edit the web.xml file and set the follo
 ```
 
 Where username is your voxbone username and secret is the WebRTC secret password you defined for your voxbone account.
+
+Once these 2 parameters are set, simply go to the root folder of the project and start the demo via maven using:
+```
+mvn clean tomcat7:run
+```
