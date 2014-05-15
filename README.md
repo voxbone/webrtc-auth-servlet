@@ -29,3 +29,4 @@ Once these 2 parameters are set, simply go to the root folder of the project and
 ```
 mvn clean tomcat7:run
 ```
+You should then be able to access the demo at the following url: http://localhost:8080/demo
