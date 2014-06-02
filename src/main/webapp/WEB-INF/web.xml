@@ -18,7 +18,7 @@
         <init-param>
             <description>Secret key used to authenticate</description>
             <param-name>com.voxbone.webrtc.auth.secret</param-name>
-            <param-value>secret</param-value>
+            <param-value><![CDATA[secret]]></param-value>
         </init-param>
         <init-param>
             <description>TTL of the generated auth signature</description>

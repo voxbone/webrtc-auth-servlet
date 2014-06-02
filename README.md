@@ -1,7 +1,7 @@
 webrtc-auth-servlet
 ===================
 
-This projects aims to provide an easy way for voxbone customer to integrate WebRTC ephemeral authentication on their website.
+This projects aims to provide an easy way for Voxbone customer to integrate WebRTC ephemeral authentication on their website.
 The servlet can be fully configured using web.xml and output javascript variable which holds ephemeral authentication data.
 
 This project is also shipped with a demo.
@@ -19,11 +19,15 @@ In order to get the demo working, simply edit the web.xml file and set the follo
         <init-param>
             <description>Secret key used to authenticate</description>
             <param-name>com.voxbone.webrtc.auth.secret</param-name>
-            <param-value>secret</param-value>
+            <param-value><![CDATA[secret]]></param-value>
         </init-param>
 ```
 
-Where username is your voxbone username and secret is the WebRTC secret password you defined for your voxbone account.
+Where username is your Voxbone username and secret is the WebRTC secret password you defined for your voxbone account.
+
+Please note that you shouldn't delete the <![CDATA[ ... ]]  tag as it allows you to input special character for your password.
+just replace "secret" by your actual webrtc password.
+CDATA is required to allow special character to be set within an xml file (such  like web.xml)
 
 Once these 2 parameters are set, simply go to the root folder of the project and start the demo via maven using:
 ```
