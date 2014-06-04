@@ -5,11 +5,27 @@
          id="WebApp_ID" version="2.5">
 
     <servlet>
-        <description>WebRtc Servlet which creates a token to authenticate toward voxbone ephemeral auth server</description>
+        <description>
+            WebRtc Servlet which creates a token to authenticate toward voxbone ephemeral auth server.
+
+            User have 2 ways of configuring the servlet.
+            1) setting the com.voxbone.webrtc_config_file init param:
+            The servlet will then look into the properties file for username, secret, and other config params.
+
+            2) setting params directly into  the web.xml file.
+            These settings will only be applied if the com.voxbone.webrtc.config_file is not set.$
+            Example of web.xml param can be found below ( commented )
+
+        </description>
 
         <servlet-name>webrtc-auth-servlet</servlet-name>
         <servlet-class>com.voxbone.webrtc.WebrtcAuthServlet</servlet-class>
 
+        <init-param>
+            <param-name>com.voxbone.webrtc.config_file</param-name>
+            <param-value>/WEB-INF/voxbone.properties</param-value>
+        </init-param>
+<!--
         <init-param>
             <description>Username used to authenticate</description>
             <param-name>com.voxbone.webrtc.auth.username</param-name>
@@ -25,8 +41,9 @@
             <param-name>com.voxbone.webrtc.auth.TTL</param-name>
             <param-value>300</param-value>
         </init-param>
+-->
     </servlet>
-    
+
     <servlet-mapping>
         <servlet-name>webrtc-auth-servlet</servlet-name>
         <url-pattern>/auth</url-pattern>

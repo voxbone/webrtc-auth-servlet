@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.SignatureException;
+import java.util.Properties;
 
 /**
  * This class purpose is to return a string representing a javascript variable declaration.
@@ -22,6 +24,7 @@ public class WebrtcAuthServlet extends HttpServlet{
 	public static final String PARAM_KEY = "com.voxbone.webrtc.auth.secret";
 	public static final String PARAM_TTL = "com.voxbone.webrtc.auth.TTL";
 	public static final String PARAM_VAR_NAME = "com.voxbone.webrtc.auth.varname";
+	public static final String PARAM_CONFIG_FILE = "com.voxbone.webrtc.config_file";
 
 
 	private String username;
@@ -31,21 +34,42 @@ public class WebrtcAuthServlet extends HttpServlet{
 
 	@Override
 	public void init() throws ServletException {
-		this.username = super.getInitParameter(PARAM_USERNAME);
-		if(username == null){
+		//If a config file is set,use it.
+		if(super.getInitParameter( PARAM_CONFIG_FILE ) != null){
+			String fileName = super.getInitParameter(PARAM_CONFIG_FILE);
+			Properties properties = new Properties();
+			try {
+				properties.load(getServletContext().getResourceAsStream(fileName));
+				this.username = properties.getProperty(PARAM_USERNAME,"username");
+				this.secret = properties.getProperty(PARAM_KEY,"secret");
+				this.ttl = Long.parseLong(properties.getProperty(PARAM_TTL, "300"));
+				this.varName = properties.getProperty(PARAM_VAR_NAME,"voxrtc_config");
+			} catch (IOException e) {
+				log("error loading properties",e);
+				throw new ServletException("unable to load config file "+fileName,e);
+			}
+		//Else try to find init params in web.xml
+		}else{
+			this.username = super.getInitParameter(PARAM_USERNAME);
+			this.secret = super.getInitParameter(PARAM_KEY);
+
+			if(super.getInitParameter( PARAM_TTL) !=null){
+				this.ttl = Long.parseLong(super.getInitParameter(PARAM_TTL));
+			}
+
+			if(super.getInitParameter( PARAM_VAR_NAME) != null){
+				this.varName = super.getInitParameter( PARAM_VAR_NAME );
+			}
+
+		}
+
+		//Validate that we got all of what we need
+		if(this.username == null){
 			throw new ServletException(PARAM_USERNAME+" has not been set");
 		}
-		this.secret = super.getInitParameter(PARAM_KEY);
+
 		if(secret == null){
 			throw new ServletException(PARAM_KEY+" has not been set");
-		}
-
-		if(super.getInitParameter( PARAM_TTL) !=null){
-			this.ttl = Long.parseLong(super.getInitParameter(PARAM_TTL));
-		}
-
-		if(super.getInitParameter( PARAM_VAR_NAME) != null){
-			this.varName = super.getInitParameter( PARAM_VAR_NAME );
 		}
 
 		super.init();
