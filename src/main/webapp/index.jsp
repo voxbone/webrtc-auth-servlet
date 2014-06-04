@@ -8,16 +8,34 @@
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
     <script>
+
+
+
+        // Register callbacks to desired call events
+        var eventHandlers = {
+            'progress':   function(e){ document.getElementById("status_message").innerHTML="Calling " + document.getElementById('number').value;},
+            'failed':     function(e){ document.getElementById("status_message").innerHTML="Failed to Connect"; },
+            'started':    function(e){ document.getElementById("status_message").innerHTML="<b><font color='green'>In Call</font></b>"; },
+            'ended':      function(e){ document.getElementById("status_message").innerHTML="<b><font color='red'>Call Ended</font></b>"; }
+        };
+
+
+
+
+
         /** This part is required as it handle Voxbone WebRTC initialization **/
         function init(){
-            // Check if customer web browser support webrtc, if not send an alert
-            // This is optional
+            // Set the webrtc auth server url (url below it the default one)
             voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
+            // Force the preferedPop to CN
             voxbone.WebRTC.preferedPop = 'CN';
+            // set custom event handlers
+            voxbone.WebRTC.customEventHandler = eventHandlers;
 
             //Bootstrap Voxbone WebRTC javascript object
             voxbone.WebRTC.init(voxrtc_config);
         }
+
         /** Optional part, only use to play with mute **/
         function toggleMute(){
             var button = document.getElementById("mute");
@@ -43,6 +61,8 @@
     <input type='button' value='hangup' onClick='voxbone.WebRTC.hangup();'/>
     <!-- toggle mute ON/OFF -->
     <input id="mute" type="button" value="mute" onclick="toggleMute()"/>
+    <br>
+    <div id="status_message"><p>Initializing configuration</p></div>
 
 </form>
 </body>
