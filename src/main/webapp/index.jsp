@@ -27,8 +27,13 @@
         function init(){
             // Set the webrtc auth server url (url below it the default one)
             voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
-            // Force the preferedPop to CN
-            voxbone.WebRTC.preferedPop = 'CN';
+
+            // Force the preferedPop to TEST.
+            //This can be usefull if you need  to get your webrtc calls troubleshooted
+            //If this is not set, a ping to each pop will be issued to determine which is the most optimal for the user
+            //Default is to use the ping mechanism to determine the preferedPop.
+            //voxbone.WebRTC.preferedPop = 'TEST';
+
             // set custom event handlers
             voxbone.WebRTC.customEventHandler = eventHandlers;
 
