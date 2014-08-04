@@ -37,6 +37,11 @@
             // set custom event handlers
             voxbone.WebRTC.customEventHandler = eventHandlers;
 
+            //Set the caller-id, domain name gets automatically stripped off
+            //Note that It must be a valid sip uri.
+            //Default value is: voxrtc@voxbone.com
+            //voxbone.WebRTC.configuration.uri = "caller-id@voxbone.com";
+
             //Bootstrap Voxbone WebRTC javascript object
             voxbone.WebRTC.init(voxrtc_config);
         }
