@@ -32,7 +32,7 @@
             //This can be usefull if you need  to get your webrtc calls troubleshooted
             //If this is not set, a ping to each pop will be issued to determine which is the most optimal for the user
             //Default is to use the ping mechanism to determine the preferedPop.
-            //voxbone.WebRTC.preferedPop = 'TEST';
+            //voxbone.WebRTC.preferedPop = 'BE';
 
             // set custom event handlers
             voxbone.WebRTC.customEventHandler = eventHandlers;
