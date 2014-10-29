@@ -3,7 +3,7 @@
 <head>
     <title></title>
     <script src="auth" type="text/javascript"></script>
-    <script src="https://webrtc.voxbone.com/js/voxbone-0.0.1.js" type="text/javascript"></script>
+    <script src="https://webrtc.voxbone.com/js/voxbone-0.0.2.js" type="text/javascript"></script>
     <script src="https://webrtc.voxbone.com/js/jssip-0.3.0.js" type="text/javascript"></script>
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
