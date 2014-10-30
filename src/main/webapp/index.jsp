@@ -3,7 +3,7 @@
 <head>
     <title></title>
     <script src="auth" type="text/javascript"></script>
-    <script src="https://webrtc.voxbone.com/js/voxbone-0.0.1.js" type="text/javascript"></script>
+    <script src="https://webrtc.voxbone.com/js/voxbone-0.0.2.js" type="text/javascript"></script>
     <script src="https://webrtc.voxbone.com/js/jssip-0.3.0.js" type="text/javascript"></script>
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
@@ -28,7 +28,7 @@
             // Set the webrtc auth server url (url below it the default one)
             voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
 
-            // Force the preferedPop to TEST.
+            // Force the preferedPop to BE.
             //This can be usefull if you need  to get your webrtc calls troubleshooted
             //If this is not set, a ping to each pop will be issued to determine which is the most optimal for the user
             //Default is to use the ping mechanism to determine the preferedPop.
@@ -57,6 +57,12 @@
                 button.value = "unmute";
             }
         }
+
+        function sendDTMF(){
+            var value = document.getElementById('dtmf').value;
+            voxbone.WebRTC.sendDTMF(value);
+            console.log("dtmf value: ",value);
+        }
     </script>
 </head>
 
@@ -71,9 +77,13 @@
     <input type='button' value='hangup' onClick='voxbone.WebRTC.hangup();'/>
     <!-- toggle mute ON/OFF -->
     <input id="mute" type="button" value="mute" onclick="toggleMute()"/>
+    <br/>
+    <label for="dtmf">DTMF</label>
+    <input type="text" id="dtmf" size="1"/>
+    <input type="button" onclick="sendDTMF();" value="send">
+
     <br>
     <div id="status_message"><p>Initializing configuration</p></div>
-
 </form>
 </body>
 </html>
