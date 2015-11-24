@@ -2,31 +2,23 @@
 <html>
 <head>
     <title></title>
+
+    <!-- This generates the secure token and populates it in the variable voxrtc_config -->
     <script src="auth" type="text/javascript"></script>
-    <script src="https://webrtc.voxbone.com/js/voxbone-0.0.2.js" type="text/javascript"></script>
-    <script src="https://webrtc.voxbone.com/js/jssip-0.3.0.js" type="text/javascript"></script>
+
+    <script src="https://webrtc.voxbone.com/js/jssip-0.7.9-vox.js" type="text/javascript"></script>
+    <script src="https://webrtc.voxbone.com/js/voxbone-0.0.3.js" type="text/javascript"></script>
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
     <script>
 
 
 
-        // Register callbacks to desired call events
-        var eventHandlers = {
-            'progress':   function(e){ document.getElementById("status_message").innerHTML="Calling " + document.getElementById('number').value;},
-            'failed':     function(e){ document.getElementById("status_message").innerHTML="Failed to Connect"; },
-            'started':    function(e){ document.getElementById("status_message").innerHTML="<b><font color='green'>In Call</font></b>"; },
-            'ended':      function(e){ document.getElementById("status_message").innerHTML="<b><font color='red'>Call Ended</font></b>"; }
-        };
-
-
-
-
 
         /** This part is required as it handle Voxbone WebRTC initialization **/
         function init(){
-            // Set the webrtc auth server url (url below it the default one)
-            voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
+            // Set the webrtc auth server url (url below is the default one)
+            // voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
 
             // Force the preferedPop to BE.
             //This can be usefull if you need  to get your webrtc calls troubleshooted
@@ -35,7 +27,14 @@
             //voxbone.WebRTC.preferedPop = 'BE';
 
             // set custom event handlers
-            voxbone.WebRTC.customEventHandler = eventHandlers;
+            voxbone.WebRTC.customEventHandler.progress=function(e){ document.getElementById("status_message").innerHTML="Calling " + document.getElementById('number').value;};
+            voxbone.WebRTC.customEventHandler.failed=function(e){ document.getElementById("status_message").innerHTML="Failed to Connect"; };
+            voxbone.WebRTC.customEventHandler.accepted=function(e){ document.getElementById("status_message").innerHTML="<b><font color='green'>In Call</font></b>"; };
+            voxbone.WebRTC.customEventHandler.ended=function(e){ document.getElementById("status_message").innerHTML="<b><font color='red'>Call Ended</font></b>"; };
+
+
+
+
 
             //Set the caller-id, domain name gets automatically stripped off
             //Note that It must be a valid sip uri.
