@@ -57,4 +57,5 @@ Once the above is done, you can simply run the following command line from proje
 ```
 mvn clean tomcat7:run
 ```
-You should then be able to access the demo at the following url: http://localhost:8080/demo
+You should then be able to access the demo at the following url: https://localhost:8443/demo
+The url that generates the voxrtc_config is: https://localhost:8443/demo/auth

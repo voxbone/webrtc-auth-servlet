@@ -56,9 +56,11 @@
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <configuration>
-                    <httpPort>8080</httpPort>
-                    <httpsPort>8443</httpsPort>
                     <path>/demo</path>
+                    <port>0</port>
+                    <httpsPort>8443</httpsPort>
+		    <keystoreFile>${basedir}/certificates/keystore.jks</keystoreFile>
+		    <keystorePass>changeit</keystorePass>
                     <warFile>${project.build.outputDirectory}/${war.name}</warFile>
                     <!-- force tomcat to deploy even if project packaging is not set to war !-->
                     <ignorePackaging>true</ignorePackaging>
