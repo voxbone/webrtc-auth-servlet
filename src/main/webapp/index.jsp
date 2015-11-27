@@ -18,7 +18,7 @@
             'failed':     function(e){ document.getElementById("status_message").innerHTML="Failed to Connect"; },
             'accepted':    function(e){ document.getElementById("status_message").innerHTML="<b><font color='green'>In Call</font></b>"; },
             'ended':      function(e){ document.getElementById("status_message").innerHTML="<b><font color='red'>Call Ended</font></b>"; },
-            'localMediaVolume':     function(e){ 
+            'localMediaVolume':     function(e){
 			document.getElementById('volume').value = e.localVolume;
 	     },
         };
@@ -49,9 +49,47 @@
             //Note that It must be a valid sip uri.
             //Default value is: voxrtc@voxbone.com
             //voxbone.WebRTC.configuration.uri = "caller-id@voxbone.com";
+            //Add a display name
+          //voxbone.WebRTC.configuration.display_name = "";
+          //Add an object or string in the X-Voxbone-Context SIP header
+          //voxbone.WebRTC.context = "Here's a context string";
+
+          /**
+            * dialer_string
+            * Digits to dial after call is established
+            * dialer string is comma separated, to define a specific pause between digits,
+            * we add another entry like 1,2,3,1200ms,4,.. this will add a 1200ms of pause between
+            * digits 3 & 4.
+            * Example = '1,2,3,1200ms,4,5,900ms,6,#'
+          **/
+          //voxbone.WebRTC.configuration.dialer_string = "1,2,3,1200ms,4,5,900ms,6,#";
+
+          /**
+            * digit duration (in milliseconds)
+            * It defines the duration of digits sent by the web application.
+            * By default, default digit duration is 100 ms.
+          **/
+          //voxbone.WebRTC.configuration.digit_duration = 1000;
+
+          /**
+            * gap can be set between all digits in milliseconds
+          **/
+          //voxbone.WebRTC.configuration.digit_gap = 1400;
+
+          /**
+            * This configuration option if enabled allows voxbone webrtc sdk to push
+            * all the call logs to a voxbone defined backend, where they can be used
+            * for troubleshooting. By default, this option is disabled.
+            * Set this option to true to allow voxbone to collect call logs
+          **/
+          //voxbone.WebRTC.configuration.post_logs = true;
 
             //Bootstrap Voxbone WebRTC javascript object
             voxbone.WebRTC.init(voxrtc_config);
+
+            //Basic Authentication can also be used instead of using the token in voxbone.WebRTC.init()
+            //voxbone.WebRTC.basicAuthInit(your_username, your_secret_key)
+
         }
 
         /** Optional part, only use to play with mute **/
