@@ -11,14 +11,25 @@
     <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
     <script>
+        // Register callbacks to desired call events
+        var eventHandlers = {
+            'progress':   function(e){ document.getElementById("status_message").innerHTML="Dialing 883510080143";},
+            'getUserMediaFailed':     function(e){ document.getElementById("status_message").innerHTML="Failed to access mic/camera"; },
+            'failed':     function(e){ document.getElementById("status_message").innerHTML="Failed to Connect"; },
+            'accepted':    function(e){ document.getElementById("status_message").innerHTML="<b><font color='green'>In Call</font></b>"; },
+            'ended':      function(e){ document.getElementById("status_message").innerHTML="<b><font color='red'>Call Ended</font></b>"; },
+            'localMediaVolume':     function(e){ 
+			document.getElementById('volume').value = e.localVolume;
+	     },
+        };
+
 
 
 
 
         /** This part is required as it handle Voxbone WebRTC initialization **/
         function init(){
-            // Set the webrtc auth server url (url below is the default one)
-            // voxbone.WebRTC.authServerURL = "https://webrtc.voxbone.com/rest/authentication/createToken";
+
 
             // Force the preferedPop to BE.
             //This can be usefull if you need  to get your webrtc calls troubleshooted
@@ -27,14 +38,12 @@
             //voxbone.WebRTC.preferedPop = 'BE';
 
             // set custom event handlers
-            voxbone.WebRTC.customEventHandler.progress=function(e){ document.getElementById("status_message").innerHTML="Calling " + document.getElementById('number').value;};
-            voxbone.WebRTC.customEventHandler.failed=function(e){ document.getElementById("status_message").innerHTML="Failed to Connect"; };
-            voxbone.WebRTC.customEventHandler.accepted=function(e){ document.getElementById("status_message").innerHTML="<b><font color='green'>In Call</font></b>"; };
-            voxbone.WebRTC.customEventHandler.ended=function(e){ document.getElementById("status_message").innerHTML="<b><font color='red'>Call Ended</font></b>"; };
-
-
-
-
+            voxbone.WebRTC.customEventHandler.progress = eventHandlers.progress;
+            voxbone.WebRTC.customEventHandler.failed = eventHandlers.failed;
+            voxbone.WebRTC.customEventHandler.accepted = eventHandlers.accepted;
+            voxbone.WebRTC.customEventHandler.ended = eventHandlers.ended;
+            voxbone.WebRTC.customEventHandler.getUserMediaFailed = eventHandlers.getUserMediaFailed;
+            voxbone.WebRTC.customEventHandler.localMediaVolume = eventHandlers.localMediaVolume;
 
             //Set the caller-id, domain name gets automatically stripped off
             //Note that It must be a valid sip uri.
@@ -67,6 +76,8 @@
 
 <!-- invoke init() method when page is initializing -->
 <body onload="init();">
+<!-- voxbone unloadHandler will hangup any ongoing call -->
+<body onbeforeunload="voxbone.WebRTC.unloadHandler();">
 <form>
     <!-- input text which holds the number to dial -->
     <input type='text' id='number'/>
@@ -80,6 +91,11 @@
     <label for="dtmf">DTMF</label>
     <input type="text" id="dtmf" size="1"/>
     <input type="button" onclick="sendDTMF();" value="send">
+    <div id="divMeter">
+	<div class="label">Local Volume: </div>
+	<meter id="volume" high="0.15" max="1" value="0"></meter>
+	<div class="value"></div>
+    </div>
 
     <br>
     <div id="status_message"><p>Initializing configuration</p></div>
