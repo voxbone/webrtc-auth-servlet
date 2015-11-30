@@ -6,16 +6,17 @@
     <!-- This generates the secure token and populates it in the variable voxrtc_config -->
     <script src="auth" type="text/javascript"></script>
 
+    <link href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css' rel='stylesheet'></link>
     <script src="https://webrtc.voxbone.com/js/jssip-0.7.9-vox.js" type="text/javascript"></script>
     <script src="https://webrtc.voxbone.com/js/voxbone-0.0.3.js" type="text/javascript"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 
     <script>
         // Register callbacks to desired call events
         var eventHandlers = {
             'progress':   function(e){ document.getElementById("status_message").innerHTML="Dialing 883510080143";},
-            'getUserMediaFailed':     function(e){ document.getElementById("status_message").innerHTML="Failed to access mic/camera"; },
-            'failed':     function(e){ document.getElementById("status_message").innerHTML="Failed to Connect"; },
+            'getUserMediaFailed':     function(e){ alert("Unable to access mic, be sure you give permission!"); },
+            'failed':     function(e){ document.getElementById("status_message").innerHTML="<b><font color='red'>Failed to Connect: " + e.cause +"</font></b>"; },
             'accepted':    function(e){ document.getElementById("status_message").innerHTML="<b><font color='green'>In Call</font></b>"; },
             'ended':      function(e){ document.getElementById("status_message").innerHTML="<b><font color='red'>Call Ended</font></b>"; },
             'localMediaVolume':     function(e){
@@ -97,46 +98,77 @@
             var button = document.getElementById("mute");
             if( voxbone.WebRTC.isMuted ){
                 voxbone.WebRTC.unmute();
-                button.value = "mute";
+                $("#mute").text("Mute");
+                $("#mute_icon").removeClass("glyphicon-volume-off").addClass("glyphicon-volume-up");
             }else{
                 voxbone.WebRTC.mute();
-                button.value = "unmute";
-            }
+                $("#mute").text("Unmute");
+                $("#mute_icon").removeClass("glyphicon-volume-up").addClass("glyphicon-volume-off");            }
         }
 
-        function sendDTMF(){
-            var value = document.getElementById('dtmf').value;
-            voxbone.WebRTC.sendDTMF(value);
-            console.log("dtmf value: ",value);
+        function sendDTMF(digit){
+            voxbone.WebRTC.sendDTMF(digit);
+            console.log("dtmf value: ",digit);
         }
     </script>
 </head>
 
 <!-- invoke init() method when page is initializing -->
-<body onload="init();">
 <!-- voxbone unloadHandler will hangup any ongoing call -->
-<body onbeforeunload="voxbone.WebRTC.unloadHandler();">
-<form>
-    <!-- input text which holds the number to dial -->
-    <input type='text' id='number'/>
-    <!-- place a call using voxbone webrtc js lib -->
-    <input type='button' value='dial' onClick="voxbone.WebRTC.call(document.getElementById('number').value);"/>
-    <!-- hangup the current call in progress -->
-    <input type='button' value='hangup' onClick='voxbone.WebRTC.hangup();'/>
-    <!-- toggle mute ON/OFF -->
-    <input id="mute" type="button" value="mute" onclick="toggleMute()"/>
-    <br/>
-    <label for="dtmf">DTMF</label>
-    <input type="text" id="dtmf" size="1"/>
-    <input type="button" onclick="sendDTMF();" value="send">
-    <div id="divMeter">
-	<div class="label">Local Volume: </div>
-	<meter id="volume" high="0.15" max="1" value="0"></meter>
-	<div class="value"></div>
-    </div>
+<body onload="init()" onbeforeunload="voxbone.WebRTC.unloadHandler();" style='text-align: center;'>
 
-    <br>
+<h1>Click2Call Demo</h1>
+<div class="container" style='width:200px; margin-top:1%;'>
     <div id="status_message"><p>Initializing configuration</p></div>
-</form>
+    <div id="divMeter">
+        Local Volume:
+        <meter id="volume" high="0.20" optimum='0.10' max=".5" value="0"></meter>
+    </div>
+    <form>
+        <!-- input text which holds the number to dial -->
+        <input type='tel' id='number' placeholder='Enter your VoxDID' class="btn-block form-control"/>
+        <!-- place a call using voxbone webrtc js lib -->
+        <button  type="button" class='btn btn-success btn-lg btn-block' onClick="voxbone.WebRTC.call(document.getElementById('number').value);">
+            Dial
+            <span class="glyphicon glyphicon-earphone pull-left"/>
+        </button>
+        <!-- hangup the current call in progress -->
+        <button  type="button" class='btn btn-danger btn-lg btn-block' onClick='voxbone.WebRTC.hangup();'>
+            Hangup
+            <span class='glyphicon glyphicon-remove pull-left'/>
+        </button>
+        <!-- toggle mute ON/OFF -->
+        <button  type="button" id="mute" class='btn btn-info btn-lg btn-block' onclick="toggleMute()">
+            <span id="mute">Mute</span>
+            <span class='glyphicon glyphicon-volume-up pull-left' id="mute_icon" />
+        </button>
+        <br/>
+
+
+        <br>
+        <br>
+        <div>
+            <button type='button' onclick="sendDTMF('1');" class='btn btn-default'>1</button>
+            <button type='button' onclick="sendDTMF('2');" class='btn btn-default'>2</button>
+            <button type='button' onclick="sendDTMF('3');" class='btn btn-default'>3</button>
+        </div>
+        <div>
+            <button type='button' onclick="sendDTMF('4');" class='btn btn-default'>4</button>
+            <button type='button' onclick="sendDTMF('5');" class='btn btn-default'>5</button>
+            <button type='button' onclick="sendDTMF('6');" class='btn btn-default'>6</button>
+         </div>
+        <div>
+            <button type='button' onclick="sendDTMF('7');" class='btn btn-default'>7</button>
+            <button type='button' onclick="sendDTMF('8');" class='btn btn-default'>8</button>
+            <button type='button' onclick="sendDTMF('9');" class='btn btn-default'>9</button>
+         </div>
+        <div>
+            <button type='button' onclick="sendDTMF('*');" class='btn btn-default'>*</button>
+            <button type='button' onclick="sendDTMF('0');" class='btn btn-default'>0</button>
+            <button type='button' onclick="sendDTMF('#');" class='btn btn-default'>#</button>
+         </div>
+    </form>
+</div>
+
 </body>
 </html>
